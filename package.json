@@ -1,0 +1,36 @@
+{
+  "name": "mern-todoapp",
+  "version": "1.0.0",
+  "description": "MongoDB/Express/React/Node. Fullstack приложение. #javascript",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonbohdan/MERN-TodoApp.git"
+  },
+  "keywords": [
+    "MongoDB",
+    "Express",
+    "React",
+    "Node",
+    "Fullstack",
+    "приложение",
+    "javascript"
+  ],
+  "author": "Bohdan Leonets",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leonbohdan/MERN-TodoApp/issues"
+  },
+  "homepage": "https://github.com/leonbohdan/MERN-TodoApp#readme",
+  "dependencies": {
+    "concurrently": "^6.3.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.9",
+    "nodemon": "^2.0.13"
+  }
+}
