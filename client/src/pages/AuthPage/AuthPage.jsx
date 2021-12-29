@@ -6,9 +6,11 @@ const Authpage = () => {
     <>
       <div className="container">
         <div className="auth-page flex f-column f-center">
-          <h3 className="has-text-centered is-size-1-tablet">Log in Page</h3>
+          <h3 className="has-text-centered is-size-1-tablet mb-6">
+            Log in Page
+          </h3>
 
-          {/* <h3 className="has-text-centered is-size-1-tablet">Sign up Page</h3> */}
+          {/* <h3 className="has-text-centered is-size-1-tablet mb-6">Sign up Page</h3> */}
 
           <form className="has-text-centered w400">
             <div className="field">
@@ -29,7 +31,7 @@ const Authpage = () => {
               </p>
             </div>
 
-            <div className="field">
+            <div className="field mb-4">
               <p className="control has-icons-left">
                 <input
                   className="input is-rounded"
