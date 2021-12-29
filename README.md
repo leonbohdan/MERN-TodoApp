@@ -17,6 +17,7 @@ The project was created with:
 - CSS3
 - SASS
 - Node
+- Bulma
 
 # App description:
 
