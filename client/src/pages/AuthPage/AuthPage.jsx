@@ -5,12 +5,12 @@ const Authpage = () => {
   return (
     <>
       <div className="container">
-        <div className="auth-page">
+        <div className="auth-page flex f-column f-center">
           <h3 className="has-text-centered is-size-1-tablet">Log in Page</h3>
 
           {/* <h3 className="has-text-centered is-size-1-tablet">Sign up Page</h3> */}
 
-          <form>
+          <form className="has-text-centered w400">
             <div className="field">
               <p className="control has-icons-left has-icons-right">
                 <input
@@ -45,7 +45,11 @@ const Authpage = () => {
 
             <div className="field">
               <p className="control">
-                <button className="button is-success">Login</button>
+                <button className="button is-success is-rounded boxed bold-500">
+                  Log in
+                </button>
+
+                {/* <button className="button is-success is-rounded boxed bold-500">Sign up</button> */}
               </p>
             </div>
           </form>
