@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const route = require('./routes/auth.route');
 
 const app = express();
@@ -15,6 +16,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
+app.use(cors());
 app.use(express.json({ extended: true }));
 app.use("/api/auth/", route);
 

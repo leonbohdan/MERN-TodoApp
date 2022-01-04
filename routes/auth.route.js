@@ -2,12 +2,13 @@ const { Router } = require("express");
 const User = require("../models/User");
 const router = Router();
 const { check, validationResult } = require("express-validator");
+const bcrypt = require('bcryptjs');
 
 router.post(
   "/registration",
   [
     check("email", "Email is not valid!").isEmail(),
-    check("password", "Password is not valid!").isLength({ min: 4 }),
+    check("password", "Password is not valid!").isLength({ min: 4 })
   ],
   async (req, res) => {
     try {
@@ -31,9 +32,11 @@ router.post(
         });
       }
 
+      const hashedPassword = await bcrypt.hash(password, 8);
+
       const user = new User({
         email,
-        password,
+        password: hashedPassword,
       });
 
       await user.save();
