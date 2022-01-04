@@ -1,8 +1,32 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useState} from "react";
+import { Switch, Route, Link } from "react-router-dom";
+import axios from "axios";
 import "./AuthPage.sass";
 
 function Authpage() {
+  const [form, setForm] = useState({
+    email: '',
+    password: ''
+  });
+
+  const changeHandler = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
+    console.log('form', form);
+  };
+
+  const registerHandler = async () => { 
+    try {
+      await axios.post('/api/auth/registration', { ...form }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => console.log('res', res));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Switch>
       <>
@@ -19,7 +43,9 @@ function Authpage() {
                     <input
                       className="input is-rounded"
                       type="email"
+                      name="email"
                       placeholder="Email"
+                      onChange={changeHandler}
                     />
 
                     <span className="icon is-small is-left">
@@ -37,7 +63,9 @@ function Authpage() {
                     <input
                       className="input is-rounded"
                       type="password"
+                      name="password"
                       placeholder="Password"
+                      onChange={changeHandler}
                     />
 
                     <span className="icon is-small is-left">
@@ -48,7 +76,10 @@ function Authpage() {
 
                 <div className="field">
                   <p className="control">
-                    <button className="button is-success is-rounded boxed bold-500 mb-2">
+                    <button
+                      className="button is-success is-rounded boxed bold-500 mb-2"
+                      type="button"
+                    >
                       Log in
                     </button>
 
@@ -65,13 +96,15 @@ function Authpage() {
                 Sign up Page
               </h3>
 
-              <form className="has-text-centered w400">
+              <form className="has-text-centered w400" onSubmit={e => e.preventDefault()}>
                 <div className="field">
                   <p className="control has-icons-left has-icons-right">
                     <input
                       className="input is-rounded"
                       type="email"
+                      name="email"
                       placeholder="Email"
+                      onChange={changeHandler}
                     />
 
                     <span className="icon is-small is-left">
@@ -89,7 +122,9 @@ function Authpage() {
                     <input
                       className="input is-rounded"
                       type="password"
+                      name="password"
                       placeholder="Password"
+                      onChange={changeHandler}
                     />
 
                     <span className="icon is-small is-left">
@@ -100,7 +135,11 @@ function Authpage() {
 
                 <div className="field">
                   <p className="control">
-                    <button className="button is-success is-rounded boxed bold-500 mb-2">
+                    <button
+                      className="button is-success is-rounded boxed bold-500 mb-2"
+                      type="button"
+                      onClick={registerHandler}
+                    >
                       Sign up
                     </button>
 
