@@ -1,13 +1,16 @@
-import React, { useState} from "react";
+import React, { useState, useContext} from "react";
 import { Switch, Route, Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "./AuthPage.sass";
 
-function Authpage() {
+const Authpage = () => {
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
+
+  const { login } = useContext(AuthContext)
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -26,6 +29,21 @@ function Authpage() {
       console.error(error);
     }
   };
+
+  const loginHandler = async () => {
+    try {
+      await axios.post('/api/auth/login', { ...form }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          login(res.data.token, res.data.userId);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <Switch>
@@ -79,6 +97,7 @@ function Authpage() {
                     <button
                       className="button is-success is-rounded boxed bold-500 mb-2"
                       type="button"
+                      onClick={loginHandler}
                     >
                       Log in
                     </button>
@@ -96,7 +115,10 @@ function Authpage() {
                 Sign up Page
               </h3>
 
-              <form className="has-text-centered w400" onSubmit={e => e.preventDefault()}>
+              <form
+                className="has-text-centered w400"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <div className="field">
                   <p className="control has-icons-left has-icons-right">
                     <input
