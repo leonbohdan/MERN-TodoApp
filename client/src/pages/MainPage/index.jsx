@@ -95,6 +95,30 @@ const Mainpage = () => {
     [setTodos, getTodos, todos],
   );
 
+  const importantTodo = useCallback(
+    async (id) => {
+      try {
+        await axios
+          .put(
+            `/api/todo/importantTodo/${id}`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            },
+          )
+          .then((res) => {
+            setTodos([...todos], res.data);
+            getTodos();
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [setTodos, getTodos, todos],
+  );
+
   useEffect(() => {
     getTodos();
   }, [getTodos]);
@@ -157,7 +181,10 @@ const Mainpage = () => {
                     <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
                   </span>
 
-                  <span className="mr-1 icon is-medium">
+                  <span
+                    className="mr-1 icon is-medium"
+                    onClick={() => importantTodo(todo._id)}
+                  >
                     <span className="mdi mdi-24px mdi-alert pointer has-text-warning"></span>
                   </span>
 

@@ -51,7 +51,21 @@ router.put("/completedTodo/:id", async (req, res) => {
     todo.completed = !todo.completed;
 
     await todo.save();
-    
+
+    res.json(todo);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.put("/importantTodo/:id", async (req, res) => {
+  try {
+    const todo = await Todo.findOne({ _id: req.params.id });
+
+    todo.important = !todo.important;
+
+    await todo.save();
+
     res.json(todo);
   } catch (error) {
     console.error(error);
