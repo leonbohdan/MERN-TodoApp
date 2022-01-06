@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
+import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = () => {
+  const { logout, isLogined } = useContext(AuthContext);
+
   return (
     <nav
       className="navbar is-dark"
@@ -66,13 +69,21 @@ const Navbar = () => {
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons">
-                <Link className="button is-success" to="/registration">
-                  <strong>Sign up</strong>
-                </Link>
+                {isLogined ? (
+                  <Link className="button is-light" to="/" onClick={logout}>
+                    Log out
+                  </Link>
+                ) : (
+                  <>
+                    <Link className="button is-success" to="/registration">
+                      <strong>Sign up</strong>
+                    </Link>
 
-                <Link className="button is-light" to="/login">
-                  Log in
-                </Link>
+                    <Link className="button is-light" to="/login">
+                      Log in
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

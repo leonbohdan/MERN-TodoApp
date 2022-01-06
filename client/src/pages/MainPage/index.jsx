@@ -2,8 +2,8 @@ import React from 'react';
 
 const Mainpage = () => {
   return (
-    <div>
-      <h1>Main Page</h1>
+    <div className="container">
+      <h1 className="is-size-1">Main Page</h1>
     </div>
   );
 }

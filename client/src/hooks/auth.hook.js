@@ -13,7 +13,7 @@ export const useAuth = () => {
       JSON.stringify({
         userId: id,
         token: jwt,
-      }),
+      })
     );
   }, []);
 
