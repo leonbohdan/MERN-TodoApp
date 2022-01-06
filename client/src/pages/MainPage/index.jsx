@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "./MainPage.sass";
@@ -7,6 +7,23 @@ const Mainpage = () => {
   const [text, setText] = useState("");
   const [todos, setTodos] = useState([]);
   const { userId } = useContext(AuthContext);
+
+  const getTodos = useCallback(async () => {
+    try {
+      await axios
+        .get("/api/todo/", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: {userId},
+        })
+        .then((res) => {
+          setTodos(res.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [userId]);
 
   const createTodo = useCallback(async () => {
     if (!text) { return }
@@ -31,22 +48,10 @@ const Mainpage = () => {
     }
   }, [text, userId, todos]);
 
-  const getTodo = useCallback(async () => {
-    try {
-      await axios
-        .get("/api/todo", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          params: userId,
-        })
-        .then((res) => {
-          setTodos(res.data);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [userId]);
+  useEffect(() => {
+    console.log("Behavior before the component is added to the DOM");
+    getTodos();
+  }, [getTodos]);
 
   return (
     <div className="container flex f-column f-center mt-6">
@@ -73,31 +78,35 @@ const Mainpage = () => {
         </form>
 
         <div className="todos mt-6">
-          <h4 className="is-size-3 has-text-centered mb-2">Actice Todos</h4>
+          <h4 className="is-size-3 has-text-centered mb-2">Active Todos</h4>
 
-          <div className="todos__item flex f-center f-space">
-            <div className="flex f-center">
-              <div className="mr-3">1</div>
+          {
+            todos.map((todo, index) => {
+              return (
+                <div className="todos__item flex f-center f-space mb-2" key={index}>
+                  <div className="flex f-center">
+                    <div className="mr-3">{index + 1}</div>
 
-              <div className="bold-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </div>
-            </div>
+                    <div className="bold-500">{todo.text}</div>
+                  </div>
 
-            <div className="flex">
-              <span className="mr-1 icon is-medium">
-                <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
-              </span>
+                  <div className="flex">
+                    <span className="mr-1 icon is-medium">
+                      <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
+                    </span>
 
-              <span className="mr-1 icon is-medium">
-                <span className="mdi mdi-24px mdi-alert pointer has-text-warning"></span>
-              </span>
+                    <span className="mr-1 icon is-medium">
+                      <span className="mdi mdi-24px mdi-alert pointer has-text-warning"></span>
+                    </span>
 
-              <span className="icon is-medium">
-                <span className="mdi mdi-24px mdi-delete pointer has-text-black"></span>
-              </span>
-            </div>
-          </div>
+                    <span className="icon is-medium">
+                      <span className="mdi mdi-24px mdi-delete pointer has-text-black"></span>
+                    </span>
+                  </div>
+                </div>
+              );
+            })
+          }
         </div>
       </div>
     </div>
