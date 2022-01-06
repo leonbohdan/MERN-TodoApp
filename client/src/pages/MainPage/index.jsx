@@ -15,7 +15,7 @@ const Mainpage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          params: {userId},
+          params: { userId },
         })
         .then((res) => {
           setTodos(res.data);
@@ -42,14 +42,35 @@ const Mainpage = () => {
         .then((res) => {
           setTodos([...todos, res.data]);
           setText("");
+          getTodos();
         });
     } catch (error) {
       console.error(error);
     }
-  }, [text, userId, todos]);
+  }, [text, userId, todos, getTodos]);
+
+  const removeTodo = useCallback(
+    async (id) => {
+      try {
+        await axios
+          .delete(
+            `/api/todo/deleteTodo/${id}`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            },
+          )
+          .then(() => getTodos());
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [getTodos],
+  );
 
   useEffect(() => {
-    console.log("Behavior before the component is added to the DOM");
     getTodos();
   }, [getTodos]);
 
@@ -80,33 +101,37 @@ const Mainpage = () => {
         <div className="todos mt-6">
           <h4 className="is-size-3 has-text-centered mb-2">Active Todos</h4>
 
-          {
-            todos.map((todo, index) => {
-              return (
-                <div className="todos__item flex f-center f-space mb-2" key={index}>
-                  <div className="flex f-center">
-                    <div className="mr-3">{index + 1}</div>
+          {todos.map((todo, index) => {
+            return (
+              <div
+                className="todos__item flex f-center f-space mb-2"
+                key={index}
+              >
+                <div className="flex f-center">
+                  <div className="mr-3">{index + 1}</div>
 
-                    <div className="bold-500">{todo.text}</div>
-                  </div>
-
-                  <div className="flex">
-                    <span className="mr-1 icon is-medium">
-                      <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
-                    </span>
-
-                    <span className="mr-1 icon is-medium">
-                      <span className="mdi mdi-24px mdi-alert pointer has-text-warning"></span>
-                    </span>
-
-                    <span className="icon is-medium">
-                      <span className="mdi mdi-24px mdi-delete pointer has-text-black"></span>
-                    </span>
-                  </div>
+                  <div className="bold-500">{todo.text}</div>
                 </div>
-              );
-            })
-          }
+
+                <div className="flex">
+                  <span className="mr-1 icon is-medium">
+                    <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
+                  </span>
+
+                  <span className="mr-1 icon is-medium">
+                    <span className="mdi mdi-24px mdi-alert pointer has-text-warning"></span>
+                  </span>
+
+                  <span
+                    className="icon is-medium"
+                    onClick={() => removeTodo(todo._id)}
+                  >
+                    <span className="mdi mdi-24px mdi-delete pointer has-text-black"></span>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
