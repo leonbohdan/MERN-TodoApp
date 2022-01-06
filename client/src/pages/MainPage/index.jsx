@@ -1,22 +1,57 @@
-import React from 'react';
-import './MainPage.sass'
+import React, { useState, useContext, useCallback } from "react";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+import "./MainPage.sass";
 
 const Mainpage = () => {
+  const [text, setText] = useState("");
+  const [todos, setTodos] = useState([]);
+  const { userId } = useContext(AuthContext);
+
+  const createTodo = useCallback(async () => {
+    if (!text) {
+      return
+    }
+
+    try {
+      await axios
+        .post(
+          "/api/todo/addTodo",
+          { text, userId },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((res) => {
+          setTodos([...todos, res.data]);
+          setText("");
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [text, userId, todos]);
+
   return (
     <div className="container flex f-column f-center mt-6">
       <div className="w400">
         <h4 className="is-size-3 has-text-centered">Add Todo</h4>
         <form>
           <input
-            class="input is-rounded"
+            className="input is-rounded"
             type="text"
+            id="text"
+            value={text}
             name="input"
             placeholder="Todo name"
+            onChange={(e) => setText(e.target.value)}
           />
 
           <button
             type="button"
             className="button mt-4 boxed is-rounded is-primary bold-500"
+            onClick={createTodo}
           >
             Add
           </button>
@@ -52,6 +87,6 @@ const Mainpage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Mainpage;

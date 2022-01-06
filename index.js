@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const route = require('./routes/auth.route');
+const todo = require("./routes/todo.route");
 
 const app = express();
 
@@ -19,6 +20,7 @@ const options = {
 app.use(cors());
 app.use(express.json({ extended: true }));
 app.use("/api/auth/", route);
+app.use("/api/todo/", todo);
 
 async function startServer() {
   try {
