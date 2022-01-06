@@ -9,9 +9,7 @@ const Mainpage = () => {
   const { userId } = useContext(AuthContext);
 
   const createTodo = useCallback(async () => {
-    if (!text) {
-      return
-    }
+    if (!text) { return }
 
     try {
       await axios
@@ -32,6 +30,23 @@ const Mainpage = () => {
       console.error(error);
     }
   }, [text, userId, todos]);
+
+  const getTodo = useCallback(async () => {
+    try {
+      await axios
+        .get("/api/todo", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: userId,
+        })
+        .then((res) => {
+          setTodos(res.data);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [userId]);
 
   return (
     <div className="container flex f-column f-center mt-6">
