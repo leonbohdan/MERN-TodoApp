@@ -8,3 +8,15 @@
       &:hover
         transform: scale(1.2)
         transition: transform .3s ease-in-out
+
+  &__todo
+    position: relative
+
+    &.completed::after
+      position: absolute
+      content: ''
+      left: 0
+      right: 0
+      top: 50%
+      height: 2px
+      background-color: #2196f3

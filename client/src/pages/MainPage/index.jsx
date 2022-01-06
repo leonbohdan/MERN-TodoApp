@@ -2,6 +2,7 @@ import React, { useState, useContext, useCallback, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "./MainPage.sass";
+import cn from "classnames";
 
 const Mainpage = () => {
   const [text, setText] = useState("");
@@ -70,6 +71,30 @@ const Mainpage = () => {
     [getTodos],
   );
 
+  const completedTodo = useCallback(
+    async (id) => {
+      try {
+        await axios
+          .put(
+            `/api/todo/completedTodo/${id}`,
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            },
+          )
+          .then((res) => {
+            setTodos([...todos], res.data);
+            getTodos();
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [setTodos, getTodos, todos],
+  );
+
   useEffect(() => {
     getTodos();
   }, [getTodos]);
@@ -107,14 +132,28 @@ const Mainpage = () => {
                 className="todos__item flex f-center f-space mb-2"
                 key={index}
               >
-                <div className="flex f-center">
+                <div
+                  className={cn("flex f-center", {
+                    "has-text-primary": todo.important,
+                  })}
+                >
                   <div className="mr-3">{index + 1}</div>
 
-                  <div className="bold-500">{todo.text}</div>
+                  <div
+                    className={cn("todos__todo", {
+                      completed: todo.completed,
+                      "bold-500": todo.important,
+                    })}
+                  >
+                    {todo.text}
+                  </div>
                 </div>
 
                 <div className="flex">
-                  <span className="mr-1 icon is-medium">
+                  <span
+                    className="mr-1 icon is-medium"
+                    onClick={() => completedTodo(todo._id)}
+                  >
                     <span className="mdi mdi-24px mdi-check-bold pointer has-text-success"></span>
                   </span>
 
