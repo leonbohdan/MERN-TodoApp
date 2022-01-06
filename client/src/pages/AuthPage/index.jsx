@@ -1,29 +1,35 @@
-import React, { useState, useContext} from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "./AuthPage.sass";
 
 const Authpage = () => {
   const [form, setForm] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  const { login } = useContext(AuthContext)
+  const history = useHistory();
+
+  const { login } = useContext(AuthContext);
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const registerHandler = async () => { 
+  const registerHandler = async () => {
     try {
-      await axios.post('/api/auth/registration', { ...form }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => console.log('res', res));
+      await axios.post(
+        "/api/auth/registration",
+        { ...form },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      history.push("/");
     } catch (error) {
       console.error(error);
     }
@@ -31,18 +37,23 @@ const Authpage = () => {
 
   const loginHandler = async () => {
     try {
-      await axios.post('/api/auth/login', { ...form }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
+      await axios
+        .post(
+          "/api/auth/login",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((res) => {
           login(res.data.token, res.data.userId);
         });
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <Switch>

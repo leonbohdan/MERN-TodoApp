@@ -165,7 +165,7 @@ const Mainpage = () => {
 
                   <div
                     className={cn("todos__todo", {
-                      completed: todo.completed,
+                      "completed": todo.completed,
                       "bold-500": todo.important,
                     })}
                   >

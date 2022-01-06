@@ -12,7 +12,14 @@ function App() {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, token, userId, isReady, isLogined }}
+      value={{
+        login,
+        logout,
+        token,
+        userId,
+        isReady,
+        isLogined
+      }}
     >
       <div className="app">
         <Navbar />
